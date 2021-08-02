@@ -1,0 +1,116 @@
+{
+  "users": [
+    {
+      "email": "lebathanhtuan@gmail.com",
+      "password": "$2a$10$gTMHDW.C3Oc/ff64Z0tX4uT8AUt0ZC10actp9O5jXlwOTlhmaFTFK",
+      "name": "Tuan",
+      "gender": "male",
+      "role": "admin",
+      "id": 1
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "iPhone"
+    },
+    {
+      "id": 2,
+      "name": "Samsung"
+    },
+    {
+      "name": "Xiaomi",
+      "createdAt": 1628339995854,
+      "updatedAt": 1628339995854,
+      "id": 3
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 12",
+      "categoryId": 1,
+      "price": 10000000
+    },
+    {
+      "id": 2,
+      "name": "iPhone 12 Pro",
+      "categoryId": 1,
+      "price": 20000000
+    },
+    {
+      "id": 3,
+      "name": "iPhone 12 Mini",
+      "categoryId": 1,
+      "price": 5000000
+    },
+    {
+      "id": 4,
+      "name": "Galaxy S21",
+      "categoryId": 2,
+      "price": 10000000
+    },
+    {
+      "id": 5,
+      "name": "Galaxy Note 20",
+      "categoryId": 2,
+      "price": 20000000
+    },
+    {
+      "id": 6,
+      "name": "Galaxy S10",
+      "categoryId": 2,
+      "price": 5000000,
+      "updatedAt": 1627994800449
+    },
+    {
+      "name": "Xiaomi Mi 11 Ultra",
+      "categoryId": 3,
+      "price": 25000000,
+      "createdAt": 1628340146846,
+      "updatedAt": 1628340146847,
+      "id": 7
+    },
+    {
+      "name": "3213",
+      "categoryId": 3,
+      "price": 4123,
+      "createdAt": 1628340987525,
+      "updatedAt": 1628340987525,
+      "id": 8
+    },
+    {
+      "name": "Xiaomi Mi Mix 4",
+      "categoryId": 3,
+      "price": 30000000,
+      "createdAt": 1628341401332,
+      "updatedAt": 1628341401332,
+      "id": 9
+    },
+    {
+      "name": "Xiaomi mi 10",
+      "categoryId": 3,
+      "price": 4123123,
+      "createdAt": 1628341786040,
+      "updatedAt": 1628341786040,
+      "id": 10
+    }
+  ],
+  "todos": [],
+  "comments": [
+    {
+      "id": 1,
+      "content": "Ahihi máy đẹp quá",
+      "rating": 5,
+      "userId": 1,
+      "productId": 2
+    },
+    {
+      "id": 3,
+      "content": "Máy xấu bỏ xừ",
+      "rating": 1,
+      "userId": 1,
+      "productId": 1
+    }
+  ]
+}

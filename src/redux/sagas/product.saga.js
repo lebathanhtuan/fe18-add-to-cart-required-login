@@ -1,26 +1,50 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery, debounce } from "redux-saga/effects";
 import axios from 'axios';
 import { REQUEST, SUCCESS, FAILURE, PRODUCT_ACTION } from '../constants';
 import { SERVER_API_URL } from './apiUrl';
 
+import { PRODUCT_LIMIT } from '../../constants/product';
+
 function* getProductListSaga(action) {
   try {
-    const categoryId = action.payload?.categoryId;
+    const page = action.payload?.page;
+    const categoriesSelected = action.payload?.categoriesSelected;
+    const priceRange = action.payload?.priceRange;
     const searchKey = action.payload?.searchKey;
+    const more = action.payload?.more;
+    let categoryParams = '';
+    if (categoriesSelected) {
+      categoriesSelected.forEach((categoryId, categoryIndex) => {
+        const andParams = categoryIndex < categoriesSelected.length - 1 ? '&' : '';
+        categoryParams = categoryParams + `categoryId=${categoryId}${andParams}`;
+      });
+    }
+    const url = categoriesSelected?.length > 0
+      ? `${SERVER_API_URL}/products?${categoryParams}`
+      : `${SERVER_API_URL}/products`
     const result = yield axios({
       method: 'GET',
-      url: `${SERVER_API_URL}/products`,
+      url,
       params: {
         _sort: 'id',
         _order: 'desc',
-        ...categoryId && { categoryId },
+        ...page && {
+          _page: page,
+          _limit: PRODUCT_LIMIT,
+        },
+        ...priceRange && {
+          price_gte: priceRange[0],
+          price_lte: priceRange[1],
+        },
         ...searchKey && { q: searchKey }
       }
     });
     yield put({
       type: SUCCESS(PRODUCT_ACTION.GET_PRODUCT_LIST),
       payload: {
-        data: result.data
+        data: result.data,
+        page,
+        more,
       },
     });
   } catch (e) {
@@ -87,7 +111,7 @@ function* deleteProductSaga(action) {
 }
 
 export default function* productSaga() {
-  yield takeEvery(REQUEST(PRODUCT_ACTION.GET_PRODUCT_LIST), getProductListSaga);
+  yield debounce(300 ,REQUEST(PRODUCT_ACTION.GET_PRODUCT_LIST), getProductListSaga);
   yield takeEvery(REQUEST(PRODUCT_ACTION.GET_PRODUCT_DETAIL), getProductDetailSaga);
   yield takeEvery(REQUEST(PRODUCT_ACTION.CREATE_PRODUCT), createProductSaga);
   yield takeEvery(REQUEST(PRODUCT_ACTION.EDIT_PRODUCT), editProductSaga);

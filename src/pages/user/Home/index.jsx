@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Space, Row, Col, Card, Tag, Input } from 'antd';
+import { Space, Row, Col, Card, Tag, Input, Button, Slider, Checkbox } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
+
+import { PRODUCT_LIMIT } from '../../../constants/product';
 
 import {
   getProductListAction,
@@ -10,7 +12,9 @@ import {
 } from '../../../redux/actions';
 
 function HomePage() {
-  const [categorySelected, setCategorySelect] = useState(undefined);
+  const [categoriesSelected, setCategoriesSelect] = useState([]);
+  console.log('🚀 ~ file: index.jsx ~ line 16 ~ HomePage ~ categoriesSelected', categoriesSelected);
+  const [priceRange, setPriceRange] = useState([0, 30000000]);
   const [searchKey, setSearchKey] = useState('');
 
   const { productList } = useSelector((state) => state.productReducer);
@@ -20,13 +24,25 @@ function HomePage() {
 
   useEffect(() => {
     dispatch(getCategoryListAction());
-    dispatch(getProductListAction());
+    dispatch(getProductListAction({ page: 1 }));
   }, []);
 
-  function handleFilterCategory(categoryId) {
-    setCategorySelect(categoryId);
+  function handleFilterCategory(value) {
+    setCategoriesSelect(value);
     dispatch(getProductListAction({
-      categoryId,
+      page: 1,
+      categoriesSelected: value,
+      priceRange,
+      searchKey,
+    }));
+  }
+
+  function handleRangePrice(value) {
+    setPriceRange(value);
+    dispatch(getProductListAction({
+      page: 1,
+      categoriesSelected,
+      priceRange,
       searchKey,
     }));
   }
@@ -34,62 +50,103 @@ function HomePage() {
   function handleSearchProduct(value) {
     setSearchKey(value);
     dispatch(getProductListAction({
+      page: 1,
+      categoriesSelected,
+      priceRange,
       searchKey: value,
-      categoryId: categorySelected,
+    }));
+  }
+
+  function handleShowMore() {
+    dispatch(getProductListAction({
+      page: productList.page + 1,
+      searchKey: searchKey,
+      categoriesSelected,
+      priceRange,
+      more: true,
     }));
   }
 
   function renderCategoryFilter() {
-    const categorySelectedData = categoryList.data.find((item) => item.id === categorySelected);
-    if (!categorySelected && !searchKey) return null;
+    if (
+      categoriesSelected.length === 0
+      && !searchKey
+      && priceRange[0] === 0
+      && priceRange[1] === 30000000
+    ) return null;
     return (
-      <Space style={{ marginBottom: 16 }}>
+      <Space wrap style={{ marginBottom: 16 }}>
         Đang filter theo:
-        {categorySelected && (
-          <Tag
-            closable
-            onClose={() => {
-              setCategorySelect(undefined);
-              dispatch(getProductListAction({
-                categoryId: undefined,
-                searchKey: searchKey
-              }));
-            }}>
-            {categorySelectedData.name}
-          </Tag>
-        )}
+        {categoriesSelected.length > 0 && categoriesSelected.map((selectedItem, selectedIndex) => {
+          const categorySelectedData = categoryList.data.find((categoryItem) => 
+            categoryItem.id === selectedItem
+          );
+          return (
+            <Tag
+              key={`category-${selectedIndex}`}
+              closable
+              onClose={(e) => {
+                e.preventDefault();
+                const newCategoriesSelect = [...categoriesSelected];
+                newCategoriesSelect.splice(selectedIndex, 1);
+                setCategoriesSelect(newCategoriesSelect);
+                dispatch(getProductListAction({
+                  page: 1,
+                  categoriesSelected: newCategoriesSelect,
+                  priceRange,
+                  searchKey: searchKey
+                }));
+              }}>
+              {categorySelectedData.name}
+            </Tag>
+          );
+        })}
         {searchKey && (
           <Tag
             closable
             onClose={() => {
               setSearchKey('');
               dispatch(getProductListAction({
-                categoryId: categorySelected,
+                page: 1,
+                categoriesSelected,
+                priceRange,
                 searchKey: undefined,
               }));
             }}>
             {`Tìm theo từ khóa: ${searchKey}`}
           </Tag>
         )}
+        {(priceRange[0] !== 0 || priceRange[1] !== 30000000) && (
+          <Tag
+            closable
+            onClose={() => {
+              setPriceRange([0, 30000000]);
+              dispatch(getProductListAction({
+                page: 1,
+                categoriesSelected,
+                priceRange: [0, 30000000],
+                searchKey,
+              }));
+            }}>
+            {`Giá từ: ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}`}
+          </Tag>
+        )}
       </Space>
     )
   }
 
-  function renderCategoryList() {
-    return categoryList.data.map((categoryItem, categoryIndex) => {
-      return (
-        <p
-          key={`category-item-${categoryItem.id}`}
-          onClick={() => handleFilterCategory(categoryItem.id)}
-          style={{
-            color: categorySelected === categoryItem.id ? 'red' : 'black',
-            cursor: 'pointer',
-          }}
-        >
-          {categoryItem.name}
-        </p>
-      )
-    })
+  function renderCategoryCheckbox() {
+    const categoryCheckbox = categoryList.data.map((categoryItem) => ({ 
+      label: categoryItem.name,
+      value: categoryItem.id,
+    }));
+    return (
+      <Checkbox.Group
+        options={categoryCheckbox}
+        onChange={(value) => handleFilterCategory(value)}
+        value={categoriesSelected}
+      />
+    )
   }
 
   function renderProductList() {
@@ -116,7 +173,18 @@ function HomePage() {
         <Row gutter={16}>
           <Col span={4}>
             <Card title="Category Filter" size="small">
-              {renderCategoryList()}
+              {renderCategoryCheckbox()}
+            </Card>
+            <Card title="Category Filter" size="small" style={{ marginTop: 16 }}>
+              <Slider
+                min={0}
+                max={30000000}
+                step={100000}
+                range
+                tipFormatter={(value) => value.toLocaleString()}
+                onChange={(value) => handleRangePrice(value)}
+                value={priceRange}
+              />
             </Card>
           </Col>
           <Col span={20}>
@@ -131,6 +199,13 @@ function HomePage() {
             <Row gutter={[16, 16]}>
               {renderProductList()}
             </Row>
+            {productList.data.length % PRODUCT_LIMIT === 0 && (
+              <Row justify="center" style={{ marginTop: 16 }}>
+                <Button onClick={() => handleShowMore()}>
+                  Show more
+                </Button>
+              </Row>
+            )}
           </Col>
         </Row>
       </div>

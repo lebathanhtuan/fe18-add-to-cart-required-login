@@ -4,6 +4,7 @@ import { REQUEST, SUCCESS, FAILURE, PRODUCT_ACTION } from '../constants';
 const initialState = {
   productList: {
     data: [],
+    page: 1,
     load: false,
     error: null,
   },
@@ -25,15 +26,32 @@ const productReducer = createReducer(initialState, {
     };
   },
   [SUCCESS(PRODUCT_ACTION.GET_PRODUCT_LIST)]: (state, action) => {
-    const { data } = action.payload;
-    return {
-      ...state,
-      productList: {
-        ...state.productList,
-        data,
-        load: false,
-        error: null,
-      },
+    const { data, page, more } = action.payload;
+    if (more) {
+      return {
+        ...state,
+        productList: {
+          ...state.productList,
+          data: [
+            ...state.productList.data,
+            ...data,
+          ],
+          page,
+          load: false,
+          error: null,
+        },
+      }
+    } else {
+      return {
+        ...state,
+        productList: {
+          ...state.productList,
+          data,
+          page: 1,
+          load: false,
+          error: null,
+        },
+      }
     }
   },
   [FAILURE(PRODUCT_ACTION.GET_PRODUCT_LIST)]: (state, action) => {

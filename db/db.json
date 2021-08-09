@@ -94,6 +94,14 @@
       "createdAt": 1628341786040,
       "updatedAt": 1628341786040,
       "id": 10
+    },
+    {
+      "name": "Xiaomi Ahihi",
+      "categoryId": 3,
+      "price": 10000000,
+      "createdAt": 1628512038217,
+      "updatedAt": 1628512038217,
+      "id": 11
     }
   ],
   "todos": [],

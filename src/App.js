@@ -29,7 +29,6 @@ import ToDoListPage from './pages/admin/ToDoList';
 
 import {
   getUserInfoAction,
-  getCartListAction,
 } from './redux/actions'
 
 import { lightTheme, darkTheme } from './styles/themes';
@@ -49,13 +48,9 @@ function App(props) {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const cartData = JSON.parse(localStorage.getItem('cart'));
     if (userInfo) {
       const decodedUserInfo = jwtDecode(userInfo.accessToken);
       dispatch(getUserInfoAction({ id: decodedUserInfo.sub }));
-    }
-    if (cartData) {
-      dispatch(getCartListAction({ data: cartData }));
     }
   }, []);
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, InputNumber } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import history from '../../../utils/history';
 
@@ -14,7 +15,9 @@ function ProductDetailPage({ match }) {
 
   const productId = parseInt(match.params.id);
 
+  const { userInfo } = useSelector((state) => state.userReducer);
   const { productDetail } = useSelector((state) => state.productReducer);
+  const { cartList } = useSelector((state) => state.cartReducer);
 
   const dispatch = useDispatch();
 
@@ -23,12 +26,34 @@ function ProductDetailPage({ match }) {
   }, []);
 
   function handleAddToCart() {
-    dispatch(addToCartAction({
-      id: productDetail.data.id,
-      name: productDetail.data.name,
-      price: productDetail.data.price,
-      count: productCount,
-    }))
+    const cartData = [...cartList.data];
+    const cartIndex = cartData.findIndex((item) => item.productId === productId);
+    if (cartIndex !== -1) {
+      cartData.splice(cartIndex, 1, {
+        ...cartData[cartIndex],
+        count: cartData[cartIndex].count + productCount,
+      });
+      dispatch(addToCartAction({
+        id: userInfo.data.id,
+        data: { cart: cartData },
+      }));
+    } else {
+      const newCartData = [
+        ...cartData,
+        {
+          id: uuidv4(),
+          productId: productId,
+          name: productDetail.data.name,
+          price: productDetail.data.price,
+          count: productCount,
+        }
+      ]
+      dispatch(addToCartAction({
+        id: userInfo.data.id,
+        data: { cart: newCartData },
+      }));
+    }
+    
   }
 
   return (

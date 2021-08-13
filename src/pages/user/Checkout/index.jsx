@@ -2,12 +2,7 @@ import { useEffect } from 'react'
 import { Card, Row, Col, Input, Button, Form, Radio, Space } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-  minusItemCountAction,
-  plusItemCountAction,
-  deleteCartItemAction,
-  orderProductAction,
-} from '../../../redux/actions';
+import { orderProductAction } from '../../../redux/actions';
 
 function CheckoutPage() {
   const [checkoutForm] = Form.useForm();
@@ -27,6 +22,7 @@ function CheckoutPage() {
 
   function handleOrder(values) {
     dispatch(orderProductAction({
+      id: userInfo.data.id,
       data: {
         userId: userInfo.data.id,
         name: values.name,

@@ -19,16 +19,37 @@ function CartPage() {
   let totalPrice = 0;
 
   function handlePlusCount(index) {
-    dispatch(plusItemCountAction({ index }));
+    const newCartData = [...cartList.data];
+    newCartData.splice(index, 1, {
+      ...newCartData[index],
+      count: newCartData[index].count + 1,
+    });
+    dispatch(plusItemCountAction({
+      id: userInfo.data.id,
+      data: { cart: newCartData },
+    }));
   }
 
   function handleMinusCount(index) {
     if (cartList.data[index].count === 1) return null;
-    dispatch(minusItemCountAction({ index }));
+    const newCartData = [...cartList.data];
+    newCartData.splice(index, 1, {
+      ...newCartData[index],
+      count: newCartData[index].count - 1,
+    });
+    dispatch(minusItemCountAction({
+      id: userInfo.data.id,
+      data: { cart: newCartData },
+    }));
   }
 
   function handleDeleteItem(index) {
-    dispatch(deleteCartItemAction({ index }));
+    const newCartData = [...cartList.data];
+    newCartData.splice(index, 1);
+    dispatch(deleteCartItemAction({
+      id: userInfo.data.id,
+      data: { cart: newCartData },
+    }));
   }
 
   function handleCheckout() {
@@ -83,21 +104,28 @@ function CartPage() {
     })
   }
 
+  function renderCartList() {
+    if (!userInfo.data.id) {
+      return <div>Bạn cần đăng nhập để thêm vào giỏ</div>
+    } else if (cartList.data.length > 0) {
+      return (
+        <>
+          {renderCartItems()}
+          <Row justify="end">
+            Tổng: {totalPrice.toLocaleString()}
+          </Row>
+          <Button onClick={() => handleCheckout()}>Thanh Toán</Button>
+        </>
+      )
+    } else {
+      return <div>Giỏ hàng trống</div>
+    }
+  }
+
   return (
     <div style={{ padding: 24 }}>
       Cart Page
-      {cartList.data.length > 0
-        ? (
-          <>
-            {renderCartItems()}
-            <Row justify="end">
-              Tổng: {totalPrice.toLocaleString()}
-            </Row>
-            <Button onClick={() => handleCheckout()}>Thanh Toán</Button>
-          </>
-        )
-        : <div>Giỏ hàng trống</div>
-      }
+      {renderCartList()}
     </div>
   );
 }

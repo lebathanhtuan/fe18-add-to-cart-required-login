@@ -6,6 +6,17 @@
       "name": "Tuan",
       "gender": "male",
       "role": "admin",
+      "cart": [
+        {
+          "id": "010aa515-8027-46a9-ab9f-86fe3b7fa1ab",
+          "productId": 9,
+          "name": "Xiaomi Mi Mix 4",
+          "price": 30000000,
+          "count": 1
+        }
+      ],
+      "createdAt": 1628858791692,
+      "updatedAt": 1628861912252,
       "id": 1
     },
     {
@@ -14,8 +25,24 @@
       "name": "ABC",
       "gender": "female",
       "role": "user",
+      "cart": [
+        {
+          "id": "9c6c1de3-32eb-4595-b611-add7e2dc546e",
+          "productId": 5,
+          "name": "Galaxy Note 20",
+          "price": 20000000,
+          "count": 2
+        },
+        {
+          "id": "05284c72-023e-4b60-90dd-e80d828aae0d",
+          "productId": 2,
+          "name": "iPhone 12 Pro",
+          "price": 20000000,
+          "count": 1
+        }
+      ],
       "createdAt": 1628858791692,
-      "updatedAt": 1628858791692,
+      "updatedAt": 1628861887871,
       "id": 2
     }
   ],
@@ -189,6 +216,50 @@
       "createdAt": 1628858843753,
       "updatedAt": 1628858843753,
       "id": 4
+    },
+    {
+      "userId": 1,
+      "name": "Tuan",
+      "email": "lebathanhtuan@gmail.com",
+      "phoneNumber": "31241231",
+      "address": "312313",
+      "products": [
+        {
+          "id": "4b44c77f-0c9e-4bc5-9a72-4e2e7c78c3d4",
+          "productId": 9,
+          "name": "Xiaomi Mi Mix 4",
+          "price": 30000000,
+          "count": 1
+        }
+      ],
+      "totalPrice": 30000000,
+      "checkoutInfo": "momo",
+      "status": "waiting",
+      "createdAt": 1628861532077,
+      "updatedAt": 1628861532077,
+      "id": 5
+    },
+    {
+      "userId": 1,
+      "name": "Tuan",
+      "email": "lebathanhtuan@gmail.com",
+      "phoneNumber": "414213213",
+      "address": "14123",
+      "products": [
+        {
+          "id": "4b44c77f-0c9e-4bc5-9a72-4e2e7c78c3d4",
+          "productId": 9,
+          "name": "Xiaomi Mi Mix 4",
+          "price": 30000000,
+          "count": 1
+        }
+      ],
+      "totalPrice": 30000000,
+      "checkoutInfo": "zalo",
+      "status": "waiting",
+      "createdAt": 1628861609558,
+      "updatedAt": 1628861609558,
+      "id": 6
     }
   ]
 }

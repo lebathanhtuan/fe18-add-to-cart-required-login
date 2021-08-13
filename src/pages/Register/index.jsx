@@ -30,6 +30,7 @@ function RegisterPage() {
         email: values.email,
         password: values.password,
         gender: values.gender,
+        cart: [],
         role: 'user',
       },
     }));

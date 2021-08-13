@@ -19,13 +19,18 @@ import NotFoundPage from './pages/NotFound';
 import HomePage from './pages/user/Home';
 import AboutPage from './pages/user/About';
 import ProductDetailPage from './pages/user/ProductDetail';
+import CartPage from './pages/user/Cart';
+import CheckoutPage from './pages/user/Checkout';
 
 import DashboardPage from './pages/admin/Dashboard';
 import ProductListPage from './pages/admin/ProductList';
 import CategoryListPage from './pages/admin/CategoryList';
 import ToDoListPage from './pages/admin/ToDoList';
 
-import { getUserInfoAction } from './redux/actions'
+import {
+  getUserInfoAction,
+  getCartListAction,
+} from './redux/actions'
 
 import { lightTheme, darkTheme } from './styles/themes';
 
@@ -44,9 +49,13 @@ function App(props) {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const cartData = JSON.parse(localStorage.getItem('cart'));
     if (userInfo) {
       const decodedUserInfo = jwtDecode(userInfo.accessToken);
       dispatch(getUserInfoAction({ id: decodedUserInfo.sub }));
+    }
+    if (cartData) {
+      dispatch(getCartListAction({ data: cartData }));
     }
   }, []);
 
@@ -58,6 +67,8 @@ function App(props) {
             <DefaultLayout exact path="/" component={HomePage} />
             <DefaultLayout exact path="/about" component={AboutPage} />
             <DefaultLayout exact path="/product/:id" component={ProductDetailPage} />
+            <DefaultLayout exact path="/cart" component={CartPage} />
+            <DefaultLayout exact path="/checkout" component={CheckoutPage} />
           
             <AdminLayout exact path="/admin" component={DashboardPage} />
             <AdminLayout exact path="/admin/products" component={ProductListPage} />

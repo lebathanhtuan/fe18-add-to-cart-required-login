@@ -6,6 +6,7 @@ import productReducer from './product.reducer';
 import userReducer from './user.reducer';
 import todoReducer from './todo.reducer';
 import categoryReducer from './category.reducer';
+import cartReducer from './cart.reducer';
 import commonReducer from './common.reducer';
 
 import rootSaga from '../sagas';
@@ -18,6 +19,7 @@ const store = configureStore({
     userReducer: userReducer,
     todoReducer: todoReducer,
     categoryReducer: categoryReducer,
+    cartReducer: cartReducer,
     commonReducer: commonReducer,
   },
   middleware: [...getDefaultMiddleware({ thunk: false }), sagaMiddleware],

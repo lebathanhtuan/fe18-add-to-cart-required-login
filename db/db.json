@@ -7,6 +7,16 @@
       "gender": "male",
       "role": "admin",
       "id": 1
+    },
+    {
+      "email": "abc@gmail.com",
+      "password": "$2a$10$3vJIn.XbQHnrS1NG2G7rhe4y7D3kg3yIHvdMD3EEJgCPcYhD49aj2",
+      "name": "ABC",
+      "gender": "female",
+      "role": "user",
+      "createdAt": 1628858791692,
+      "updatedAt": 1628858791692,
+      "id": 2
     }
   ],
   "categories": [
@@ -119,6 +129,66 @@
       "rating": 1,
       "userId": 1,
       "productId": 1
+    }
+  ],
+  "orders": [
+    {
+      "userId": 1,
+      "name": "Tuan",
+      "email": "lebathanhtuan@gmail.com",
+      "phoneNumber": "0123456789",
+      "address": "12313",
+      "products": [
+        {
+          "id": "7936af5b-42c7-4fc9-9704-4eea2202958a",
+          "productId": 9,
+          "name": "Xiaomi Mi Mix 4",
+          "price": 30000000,
+          "count": 1
+        }
+      ],
+      "totalPrice": 30000000,
+      "checkoutInfo": "momo",
+      "status": "waiting",
+      "createdAt": 1628858649230,
+      "updatedAt": 1628858649230,
+      "id": 3
+    },
+    {
+      "userId": 2,
+      "name": "ABC",
+      "email": "abc@gmail.com",
+      "phoneNumber": "1321312314",
+      "address": "124123123",
+      "products": [
+        {
+          "id": "f26ba1bc-411f-4411-a69e-dabc9daff005",
+          "productId": 11,
+          "name": "Xiaomi Ahihi",
+          "price": 10000000,
+          "count": 2
+        },
+        {
+          "id": "b40bb188-f2e3-44f4-98ea-11fc92742a31",
+          "productId": 8,
+          "name": "3213",
+          "price": 4123,
+          "count": 1
+        },
+        {
+          "id": "e2f765c5-dc49-4641-b9e0-fb376a177a42",
+          "productId": 6,
+          "name": "Galaxy S10",
+          "price": 5000000,
+          "count": 2
+        }
+      ],
+      "totalPrice": 30004123,
+      "checkoutInfo": "zalo",
+      "status": "waiting",
+      "createdAt": 1628858843753,
+      "updatedAt": 1628858843753,
+      "id": 4
     }
   ]
 }

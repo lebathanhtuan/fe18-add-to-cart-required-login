@@ -48,10 +48,7 @@ function userReducer(state = initialState, action) {
         },
         userInfo: {
           ...state.userInfo,
-          data: {
-            ...state.userInfo.data,
-            data,
-          }
+          data,
         },
       };
     }
@@ -73,7 +70,11 @@ function userReducer(state = initialState, action) {
     case REQUEST(USER_ACTION.LOGOUT): {
       return {
         ...state,
-        userInfo: {},
+        userInfo: {
+          data: {},
+          load: false,
+          error: null,
+        },
       };
     }
 

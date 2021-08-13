@@ -1,5 +1,9 @@
-import { Space, Button, Dropdown, Menu } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { Space, Button, Dropdown, Menu, Badge } from 'antd';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import { compose } from 'redux';
 import { connect, useSelector, useDispatch } from 'react-redux';
 import { Link, withRouter } from "react-router-dom";
@@ -20,6 +24,7 @@ function Header({
   userInfo,
 }) {
   const { theme } = useSelector((state) => state.commonReducer);
+  const { cartList } = useSelector((state) => state.cartReducer);
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
@@ -87,20 +92,29 @@ function Header({
           <Style.CustomSelect.Option value="light">Light</Style.CustomSelect.Option>
           <Style.CustomSelect.Option value="dark">Dark</Style.CustomSelect.Option>
         </Style.CustomSelect>
-        {userInfo.data.name
-          ? (
-            <Dropdown overlay={renderUserDropdown()} trigger={['click']}>
-              <h3 style={{ margin: 0, color: 'white' }}>
-                {userInfo.data.name}
-              </h3>
-            </Dropdown>
-          )
-          : (
-            <Link to="/login">
-              <Button type="primary">{t('header.login')}</Button>
-            </Link>
-          )
-        }
+        <Space size={16}>
+          <Badge
+            count={cartList.data.length}
+            size="small"
+            onClick={() => history.push('/cart')}
+          >
+            <ShoppingCartOutlined style={{ fontSize: 20, color: 'white', cursor: 'pointer' }} />
+          </Badge>
+          {userInfo.data.name
+            ? (
+              <Dropdown overlay={renderUserDropdown()} trigger={['click']}>
+                <h3 style={{ margin: 0, color: 'white' }}>
+                  {userInfo.data.name}
+                </h3>
+              </Dropdown>
+            )
+            : (
+              <Link to="/login">
+                <Button type="primary">{t('header.login')}</Button>
+              </Link>
+            )
+          }
+        </Space>
       </div>
     </Style.HeaderContainer>
   );
